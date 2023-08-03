@@ -78,9 +78,13 @@ select {
 hr{
     width: 100%;
 }
-#checkbox{
-    width: 1.15em;
+input[type="checkbox"]{
+    width: 2rem;
     height: 1.15em;
     border-radius: 0.15em;
     
+}
+
+.disabled{
+  background: gray !important;
 }
