@@ -1,93 +1,105 @@
 import "./FormStyles.css";
+import "./App.css";
 import Modal from "./Modal";
-
 import { useState } from "react";
+
 function LoanForm() {
-  const [loanInputs, setLoanInputs] = useState({
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showModal, SetShowModal] = useState(false);
+  const [loanInputs, SetLoanInputs] = useState({
     name: "",
     phoneNumber: "",
     age: "",
     isEmployee: false,
     salaryRange: "",
   });
+  function handleDivClick() {
+    if (showModal) {
+      SetShowModal(false);
+    }
+  }
 
-  function handleFormSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
-    alert("hello");
+    setErrorMessage(null);
+    const { age, phoneNumber } = loanInputs;
+    if (age < 18 || age > 100) {
+      setErrorMessage("The Age is Not allowed");
+      
+    }
+    else if (phoneNumber.length < 12 || phoneNumber.length > 8) {
+     setErrorMessage("phone Number format is Incorrect");
+     }
+
+    SetShowModal(true);
   }
 
   const btnIsDisabled =
-    loanInputs.name == "" ||
-    loanInputs.age == "" ||
-    loanInputs.phoneNumber == "";
-   
-  // let btnClasses = ""
-  // if (btnIsDisabled) {
-  //   btnClasses = "disabled"
-  // } else {
-  //   btnClasses= ""
-  // }
+    loanInputs.name === "" ||
+    loanInputs.age === "" ||
+    loanInputs.phoneNumber === "";
+
   return (
-    <div className="flex" style={{ flexDirection: "column" }}>
-      <form id="loan-form" className="flex" style={{ flexDirection: "column" }}>
-        <h1>Requesting a Loan</h1>
+    <div
+      onClick={handleDivClick}
+      className="flex"
+      style={{ flexDirection: "column" }}
+    >
+      <form
+        className="flex  "
+        style={{ flexDirection: "column" }}
+        id="loan-form"
+      >
+        <h1> Requesting the Loan</h1>
         <hr />
-        <label>Name :</label>
+        <label>Name:</label>
         <input
           value={loanInputs.name}
-          onChange={(event) => {
-            setLoanInputs({ ...loanInputs, name: event.target.value });
-          }}
+          onChange={(event) =>
+            SetLoanInputs({ ...loanInputs, name: event.target.value })
+          }
         />
 
-        <label>Phone Number :</label>
+        <label>Phone Number:</label>
         <input
           value={loanInputs.phoneNumber}
-          onChange={(event) => {
-            setLoanInputs({ ...loanInputs, phoneNumber: event.target.value });
-          }}
+          onChange={(event) =>
+            SetLoanInputs({ ...loanInputs, phoneNumber: event.target.value })
+          }
         />
 
-        <label>Age :</label>
+        <label>Age:</label>
         <input
           value={loanInputs.age}
-          onChange={(event) => {
-            setLoanInputs({ ...loanInputs, age: event.target.value });
-          }}
+          onChange={(event) =>
+            SetLoanInputs({ ...loanInputs, age: event.target.value })
+          }
         />
 
-        <label style={{ marginTop: "30px" }}>Are you an employee ? </label>
-        <input
-          type="checkbox"
-          checked={loanInputs.isEmployee}
-          onChange={(event) => {
-            setLoanInputs({ ...loanInputs, isEmployee: event.target.checked });
-          }}
-        />
+        <label style={{ marginTop: "30px" }}>Are you an emplyee?</label>
+        <input id="checkbox" type="checkbox" />
 
         <label>Salary</label>
         <select
           value={loanInputs.salaryRange}
-          onChange={(event) => {
-            setLoanInputs({ ...loanInputs, salaryRange: event.target.value });
-          }}
+          onChange={(event) =>
+            SetLoanInputs({ ...loanInputs, salaryRange: event.target.value })
+          }
         >
-          <option>less than 500$</option>
-          <option>between 500$ and 2000</option>
+          <option>less than 500£$</option>
+          <option>between 500$and 2000$</option>
           <option>above 2000</option>
         </select>
-
         <button
-          className={btnIsDisabled ? "disabled" : "" }
-          onClick={handleFormSubmit}
-          disabled={btnIsDisabled}
           id="submit-loan-btn"
+          className={btnIsDisabled ? "disaled" : ""}
+          onClick={handleSubmit}
+          disabled={btnIsDisabled}
         >
           Submit
         </button>
       </form>
-
-      {/* <Modal /> */}
+      <Modal isVisible={showModal} errorMessage={errorMessage} />
     </div>
   );
 }
